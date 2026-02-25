@@ -1,0 +1,23 @@
+services:
+  backend:
+    build: ./backend
+    container_name: tasksphere-backend
+    ports:
+      - "8000:8000"
+    environment:
+      - SECRET_KEY=django-insecure-docker-secret-key
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./backend:/app
+
+  frontend:
+    build: ./frontend
+    container_name: tasksphere-frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - REACT_APP_API_URL=http://localhost:8000/api/tasks/
+    depends_on:
+      - backend
+    volumes:
+      - ./frontend:/app
